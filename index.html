@@ -1,80 +1,329 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>최단거리 계산</title>
-    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c396eec2d60f543b080e300a54e1edf7&libraries=services"></script>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+	<meta charset="utf-8">
+	<title>성일고 안전지킴이</title>
 </head>
 <body>
-    <h1>최단거리 계산</h1>
-    <label for="start">출발지:</label>
-    <input type="text" id="start">
-    <br>
-    <label for="end">도착지:</label>
-    <input type="text" id="end">
-    <br>
-    <button onclick="calculateDistance()">최단거리 계산</button>
-    <br>
-    <div id="map" style="width: 500px; height: 400px;"></div>
-    <div id="distance"></div>
+	<div id="map" style="width:1500px;height:700px;"></div>
+	<div> 
+		<label for="start">출발지:</label>
+		<input type="text" id="start" placeholder="출발지 좌표 입력">
+		<label for="end">도착지:</label>
+		<input type="text" id="end" placeholder="도착지 좌표 입력">
+		<button onclick="findRoute()">길찾기</button>
+	</div>
+	<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c396eec2d60f543b080e300a54e1edf7"></script>
+	<script>
+		// 지도 생성
+	var map = new kakao.maps.Map(document.getElementById('map'), {
+		        center: new kakao.maps.LatLng(37.4349,127.1461), // 지도의 중심좌표
+		        level: 3, // 지도의 확대 레벨
+		        mapTypeId : kakao.maps.MapTypeId.ROADMAP // 지도종류
+		    }); 
 
-    <script>
-        var map;
-        var startMarker;
-        var endMarker;
-        var distance;
+		// 지도를 생성한다 
+		var map = new kakao.maps.Map(mapContainer, mapOption); 
 
-        function initMap() {
-            var container = document.getElementById('map');
-            var options = {
-                center: new kakao.maps.LatLng(37.5665, 126.9780), // 서울의 위도와 경도
-                level: 5 // 지도 확대 레벨
-            };
-            map = new kakao.maps.Map(container, options);
-        }
+		// 지도에 확대 축소 컨트롤을 생성한다
+		var zoomControl = new kakao.maps.ZoomControl();
 
-        function calculateDistance() {
-            var start = document.getElementById('start').value;
-            var end = document.getElementById('end').value;
+		// 지도의 우측에 확대 축소 컨트롤을 추가한다
+		map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
-            var geocoder = new kakao.maps.services.Geocoder();
+	
+		// 지도에 표시할 원을 생성합니다
+		var circle1 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.43890577, 127.1496088),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle1.setMap(map); 
+var circle2 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.44290522, 127.1613737),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle2.setMap(map); 
+var circle3 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.44450947, 127.1602516),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle3.setMap(map); 
+var circle4 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.446255, 127.1702362),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle4.setMap(map); 
+var circle5 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.442671, 127.156555),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle5.setMap(map); 
+var circle6 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.43846836, 127.1641845),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle6.setMap(map); 
+var circle7 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.4435992, 127.1659947),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle7.setMap(map); 
+var circle8 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.41389695, 127.149775),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle8.setMap(map); 
+var circle9 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.41472959, 127.1580235),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle9.setMap(map); 
+var circle10 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.42783793, 127.149429),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle10.setMap(map); 
+var circle11 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.43400386, 127.166096),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle11.setMap(map); 
+var circle12 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.43785528, 127.1678574),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle12.setMap(map); 
+var circle13 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.447962, 127.163685),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle13.setMap(map); 
+var circle14 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.44843156, 127.163031),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle14.setMap(map); 
+var circle15 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.44238213, 127.181591),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle15.setMap(map); 
+var circle16 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.46100227, 127.1709005),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle16.setMap(map); 
+var circle17 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.43190777, 127.1513041),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle17.setMap(map); 
+var circle18 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.41944917, 127.1330812),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle18.setMap(map); 
+var circle19 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.42948258, 127.144034),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
+circle19.setMap(map); 
+var circle20 = new kakao.maps.Circle({
+    center: new kakao.maps.LatLng(37.43503214, 127.1432012),
+    radius: 200,
+    strokeWeight: 5,
+    strokeColor: '#75B8FA',
+    strokeOpacity: 1,
+    strokeStyle: 'dashed',
+    fillColor: '#CFE7FF',
+    fillOpacity: 0.7
+});
 
-            geocoder.addressSearch(start, function (startResult, status) {
-                if (status === kakao.maps.services.Status.OK) {
-                    var startCoords = new kakao.maps.LatLng(startResult[0].y, startResult[0].x);
-                    startMarker = new kakao.maps.Marker({
-                        position: startCoords,
-                        map: map
-                    });
-                } else {
-                    alert('출발지를 찾을 수 없습니다.');
-                    return;
-                }
+		// 지도에 원을 표시합니다 
+		circle20.setMap(map); 
+          // 현재 위치 표시를 위한 코드 시작
+        // HTML5의 Geolocation을 사용하여 현재 위치를 가져옵니다
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var lat = position.coords.latitude; // 위도
+                var lng = position.coords.longitude; // 경도
 
-                geocoder.addressSearch(end, function (endResult, status) {
-                    if (status === kakao.maps.services.Status.OK) {
-                        var endCoords = new kakao.maps.LatLng(endResult[0].y, endResult[0].x);
-                        endMarker = new kakao.maps.Marker({
-                            position: endCoords,
-                            map: map
-                        });
-                    } else {
-                        alert('도착지를 찾을 수 없습니다.');
-                        return;
-                    }
-
-                    var distance = kakao.maps.services.Distance();
-                    distance.distance(startCoords, endCoords, function (result, status) {
-                        if (status === kakao.maps.services.Status.OK) {
-                            document.getElementById('distance').innerHTML = '최단거리: ' + (result / 1000).toFixed(2) + ' km';
-                        } else {
-                            alert('거리를 계산할 수 없습니다.');
-                        }
-                    });
+                // 현재 위치 마커를 생성합니다
+                var marker = new kakao.maps.Marker({
+                    position: new kakao.maps.LatLng(lat, lng),
+                    map: map
                 });
+
+                // 지도의 중심을 현재 위치로 이동합니다
+                map.setCenter(new kakao.maps.LatLng(lat, lng));
             });
         }
-    </script>
-    <script async defer src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c396eec2d60f543b080e300a54e1edf7&callback=initMap"></script>
+        // 현재 위치 표시를 위한 코드 끝
+		// 마커 이미지의 주소
+		var markerImageUrl = 'https://img3.daumcdn.net/thumb/R658x0.q70/?fname=https://t1.daumcdn.net/news/201905/24/joongang/20190524020049809knia.jpg', 
+		    markerImageSize = new kakao.maps.Size(32, 18), // 마커 이미지의 크기
+		    markerImageOptions = { 
+		        offset : new kakao.maps.Point(160, 179)// 마커 좌표에 일치시킬 이미지 안의 좌표
+		    };
+
+		// 마커 이미지를 생성한다
+		var markerImage = new kakao.maps.MarkerImage(markerImageUrl, markerImageSize, markerImageOptions);
+
+		// 지도에 마커를 생성하고 표시한다
+		var marker = new kakao.maps.Marker({
+		    position: new kakao.maps.LatLng(37.44610, 126.79498), // 마커의 좌표
+		    draggable : true, // 마커를 드래그 가능하도록 설정한다
+		    image : markerImage, // 마커의 이미지
+		    map: map // 마커를 표시할 지도 객체
+		});
+		// 길찾기 함수
+        function findRoute() {
+            var startCoord = document.getElementById('start').value;
+            var endCoord = document.getElementById('end').value;
+
+		// 출발지와 도착지 좌표를 좌표로 변환
+            startCoord = parseCoord(startCoord);
+            endCoord = parseCoord(endCoord);
+
+
+            // 길찾기 서비스 객체를 생성
+            var ps = new kakao.maps.services.Places();
+
+            // 길찾기 요청 객체 생성
+            var routeSearchRequest = {
+                origin: startCoord,
+                destination: endCoord,
+                travelMode: kakao.maps.services.TravelMode.TRANSIT
+            };
+
+            // 길찾기 요청
+            ps.route(routeSearchRequest, function (result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    var path = result.routes[0].path;
+                    var polyline = new kakao.maps.Polyline({
+                        path: path,
+                        strokeWeight: 4,
+                        strokeColor: '#FF0000',
+                        strokeOpacity: 0.7,
+                        strokeStyle: 'solid'
+                    });
+                    polyline.setMap(map);
+                }
+	    });
+	</script>
 </body>
 </html>
