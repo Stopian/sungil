@@ -21,16 +21,15 @@
     
     <div>
         <label for="destination">Destination Coordinates (Lat, Long):</label>
-        <input type="text" id="destination" placeholder="e.g., 34.0522, -118.2437">
+        <input type="text" id="destination" placeholder="e.g., 37.4349, 127.1459">
     </div>
 
     <button onclick="calculateRoute()">Calculate Route</button>
 
-    <div id="map" style="height: 400px;"></div>
+    <div id="map" style="height: 100vh;"></div>
 
     <script>
-        var map = L.map('map').setView([0, 0], 2); // Initial map view
-        var routingControl;
+        var map = L.map('map').setView([37.4349, 127.1459], 13); // Set initial map view with fixed destination coordinates
 
         // Add a tile layer (you can use different map providers)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
