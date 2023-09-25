@@ -4,7 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A* Algorithm Pathfinding</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        /* CSS 스타일링을 여기에 추가합니다. */
+        #grid-container {
+            display: grid;
+            grid-template-columns: repeat(20, 30px);
+            gap: 1px;
+            margin-top: 20px;
+        }
+
+        .grid-cell {
+            width: 30px;
+            height: 30px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+        }
+
+        .path {
+            background-color: #00ff00; /* 경로의 배경색을 변경하세요. */
+        }
+
+        #controls {
+            margin-top: 20px;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        input[type="number"] {
+            width: 40px;
+        }
+
+        button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <h1>A* Algorithm Pathfinding</h1>
@@ -47,22 +85,147 @@
 
         initializeGrid();
 
-        // A* 알고리즘 및 이벤트 처리 로직을 여기에 추가하세요.
-        // A* 알고리즘을 구현하는 것은 복잡하므로 자세한 내용은 길찾기 알고리즘 튜토리얼과 예제를 참고하십시오.
+        // 그리드 상태를 나타내는 배열
+        const grid = [];
+
+        // 그리드 초기화 함수
+        function initializeGrid() {
+            for (let i = 0; i < gridSize; i++) {
+                grid[i] = [];
+                for (let j = 0; j < gridSize; j++) {
+                    grid[i][j] = {
+                        row: i,
+                        col: j,
+                        isObstacle: false,
+                        g: 0,
+                        h: 0,
+                        f: 0,
+                        parent: null
+                    };
+                }
+            }
+        }
+
+        initializeGrid();
+
+        // A* 알고리즘 함수
+        function aStar(startX, startY, endX, endY) {
+            // 시작 노드와 도착 노드 설정
+            const startNode = grid[startX][startY];
+            const endNode = grid[endX][endY];
+
+            // 오픈 리스트와 닫힌 리스트 초기화
+            const openList = [];
+            const closedList = [];
+
+            // 시작 노드를 오픈 리스트에 추가
+            openList.push(startNode);
+
+            // A* 알고리즘 메인 루프
+            while (openList.length > 0) {
+                // 현재 노드 선택 (f 값이 가장 작은 노드)
+                let currentNode = openList[0];
+                for (let i = 1; i < openList.length; i++) {
+                    if (openList[i].f < currentNode.f) {
+                        currentNode = openList[i];
+                    }
+                }
+
+                // 현재 노드를 오픈 리스트에서 제거하고 닫힌 리스트에 추가
+                openList.splice(openList.indexOf(currentNode), 1);
+                closedList.push(currentNode);
+
+                // 도착 지점에 도달하면 경로를 구성하고 반환
+                if (currentNode === endNode) {
+                    const path = [];
+                    let current = currentNode;
+                    while (current !== null) {
+                        path.push({ row: current.row, col: current.col });
+                        current = current.parent;
+                    }
+                    return path.reverse();
+                }
+
+                // 인접한 노드들을 확인
+                const neighbors = getNeighbors(currentNode);
+                for (const neighbor of neighbors) {
+                    // 닫힌 리스트에 있는 노드는 무시
+                    if (closedList.includes(neighbor) || neighbor.isObstacle) {
+                        continue;
+                    }
+
+                    // g 값 업데이트
+                    const tentativeG = currentNode.g + 1;
+
+                    // 이웃 노드가 오픈 리스트에 없거나 더 나은 경로를 제공하면 업데이트
+                    if (!openList.includes(neighbor) || tentativeG < neighbor.g) {
+                        neighbor.parent = currentNode;
+                        neighbor.g = tentativeG;
+                        neighbor.h = heuristic(neighbor, endNode);
+                        neighbor.f = neighbor.g + neighbor.h;
+
+                        if (!openList.includes(neighbor)) {
+                            openList.push(neighbor);
+                        }
+                    }
+                }
+            }
+
+            // 도달할 수 없는 경우
+            return null;
+        }
+
+        // 휴리스틱 함수 (맨해튼 거리를 사용)
+        function heuristic(node, endNode) {
+            const dx = Math.abs(node.row - endNode.row);
+            const dy = Math.abs(node.col - endNode.col);
+            return dx + dy;
+        }
+
+        // 인접한 노드 가져오기
+        function getNeighbors(node) {
+            const neighbors = [];
+            const { row, col } = node;
+
+            if (row > 0) neighbors.push(grid[row - 1][col]);
+            if (row < gridSize - 1) neighbors.push(grid[row + 1][col]);
+            if (col > 0) neighbors.push(grid[row][col - 1]);
+            if (col < gridSize - 1) neighbors.push(grid[row][col + 1]);
+
+            return neighbors;
+        }
+
+        // 경로를 그리드에 표시하는 함수
+        function displayPath(path) {
+            for (const { row, col } of path) {
+                const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                cell.classList.add('path');
+            }
+        }
 
         // Start 버튼 클릭 이벤트 처리
         startButton.addEventListener('click', () => {
+            // 현재 입력된 출발지와 도착지 좌표 가져오기
             const startX = parseInt(startXInput.value);
             const startY = parseInt(startYInput.value);
             const endX = parseInt(endXInput.value);
             const endY = parseInt(endYInput.value);
 
-            // A* 알고리즘을 사용하여 최단 경로를 찾고 결과를 그리드에 표시하는 로직을 작성하세요.
+            // A* 알고리즘을 사용하여 최단 경로 계산
+            const path = aStar(startX, startY, endX, endY);
+
+            if (path) {
+                // 경로를 그리드에 표시
+                displayPath(path);
+            } else {
+                alert('도달할 수 없는 경로입니다.');
+            }
         });
 
         // Reset 버튼 클릭 이벤트 처리
         resetButton.addEventListener('click', () => {
             // 그리드 초기화 로직을 작성하세요.
+            // 경로를 초기화하고 그리드를 리셋하는 코드를 추가하세요.
         });
     </script>
 </body>
