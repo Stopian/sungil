@@ -71,21 +71,6 @@
         const resetButton = document.getElementById('reset-button');
         const gridSize = 20;
 
-        // 그리드 초기화 함수
-        function initializeGrid() {
-            for (let i = 0; i < gridSize; i++) {
-                for (let j = 0; j < gridSize; j++) {
-                    const cell = document.createElement('div');
-                    cell.className = 'grid-cell';
-                    cell.dataset.row = i;
-                    cell.dataset.col = j;
-                    gridContainer.appendChild(cell);
-                }
-            }
-        }
-
-        initializeGrid();
-
         // 그리드 상태를 나타내는 배열
         const grid = [];
 
@@ -103,6 +88,11 @@
                         f: 0,
                         parent: null
                     };
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell';
+                    cell.dataset.row = i;
+                    cell.dataset.col = j;
+                    gridContainer.appendChild(cell);
                 }
             }
         }
