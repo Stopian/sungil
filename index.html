@@ -3,60 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shortest Distance Map with Leaflet Routing Machine</title>
-    <!-- Include Leaflet CSS and JavaScript -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <!-- Include Leaflet Routing Machine CSS and JavaScript -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
-    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <title>A* Algorithm Pathfinding</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <h1>Shortest Distance Map with Leaflet Routing Machine</h1>
-    
-    <div>
-        <label for="origin">Origin Coordinates (Lat, Long):</label>
-        <input type="text" id="origin" placeholder="e.g., 40.7128, -74.0060">
+    <h1>A* Algorithm Pathfinding</h1>
+    <div id="grid-container"></div>
+    <div id="controls">
+        <label for="startX">출발 X 좌표:</label>
+        <input type="number" id="startX" min="0" max="19" value="0">
+        <label for="startY">출발 Y 좌표:</label>
+        <input type="number" id="startY" min="0" max="19" value="0">
+        <label for="endX">도착 X 좌표:</label>
+        <input type="number" id="endX" min="0" max="19" value="19">
+        <label for="endY">도착 Y 좌표:</label>
+        <input type="number" id="endY" min="0" max="19" value="19">
+        <button id="start-button">Start</button>
+        <button id="reset-button">Reset</button>
     </div>
-    
-    <div>
-        <label for="destination">Destination Coordinates (Lat, Long):</label>
-        <input type="text" id="destination" placeholder="e.g., 37.4349, 127.1459">
-    </div>
-
-    <button onclick="calculateRoute()">Calculate Route</button>
-
-    <div id="map" style="height: 100vh;"></div>
 
     <script>
-        var map = L.map('map').setView([37.4349, 127.1459], 13); // Set initial map view with fixed destination coordinates
+        const gridContainer = document.getElementById('grid-container');
+        const startXInput = document.getElementById('startX');
+        const startYInput = document.getElementById('startY');
+        const endXInput = document.getElementById('endX');
+        const endYInput = document.getElementById('endY');
+        const startButton = document.getElementById('start-button');
+        const resetButton = document.getElementById('reset-button');
+        const gridSize = 20;
 
-        // Add a tile layer (you can use different map providers)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-        function calculateRoute() {
-            var originInput = document.getElementById('origin').value;
-            var destinationInput = document.getElementById('destination').value;
-
-            var originCoordinates = originInput.split(',').map(Number);
-            var destinationCoordinates = destinationInput.split(',').map(Number);
-
-            // Remove previous route control
-            if (routingControl) {
-                map.removeControl(routingControl);
+        // 그리드 초기화 함수
+        function initializeGrid() {
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell';
+                    cell.dataset.row = i;
+                    cell.dataset.col = j;
+                    gridContainer.appendChild(cell);
+                }
             }
-
-            // Create a routing control
-            routingControl = L.Routing.control({
-                waypoints: [
-                    L.latLng(originCoordinates),
-                    L.latLng(destinationCoordinates)
-                ],
-                routeWhileDragging: true // Allow route to be updated while dragging waypoints
-            }).addTo(map);
         }
+
+        initializeGrid();
+
+        // A* 알고리즘 및 이벤트 처리 로직을 여기에 추가하세요.
+        // A* 알고리즘을 구현하는 것은 복잡하므로 자세한 내용은 길찾기 알고리즘 튜토리얼과 예제를 참고하십시오.
+
+        // Start 버튼 클릭 이벤트 처리
+        startButton.addEventListener('click', () => {
+            const startX = parseInt(startXInput.value);
+            const startY = parseInt(startYInput.value);
+            const endX = parseInt(endXInput.value);
+            const endY = parseInt(endYInput.value);
+
+            // A* 알고리즘을 사용하여 최단 경로를 찾고 결과를 그리드에 표시하는 로직을 작성하세요.
+        });
+
+        // Reset 버튼 클릭 이벤트 처리
+        resetButton.addEventListener('click', () => {
+            // 그리드 초기화 로직을 작성하세요.
+        });
     </script>
 </body>
 </html>
